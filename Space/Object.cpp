@@ -72,6 +72,29 @@ void Object::SetParent(Object* obj)
 	m_Parent = obj;
 }
 
+void Object::SetVertex()
+{
+	m_Vertex[0].x = cos(m_Rotation) * ((m_Size.x * m_Scale.x) / 2) + sin(m_Rotation) * (m_Size.y * m_Scale.y / 2) + m_Position.x;
+	m_Vertex[0].y = -(-sin(m_Rotation) * ((m_Size.x * m_Scale.x) / 2) + cos(m_Rotation) * (m_Size.y * m_Scale.y / 2)) + m_Position.y;
+
+	m_Vertex[1].x = cos(m_Rotation) * -((m_Size.x * m_Scale.x) / 2) + sin(m_Rotation) * (m_Size.y * m_Scale.y / 2) + m_Position.x;
+	m_Vertex[1].y = -(-sin(m_Rotation) * -((m_Size.x * m_Scale.x) / 2) + cos(m_Rotation) * (m_Size.y * m_Scale.y / 2)) + m_Position.y;
+
+	m_Vertex[2].x = cos(m_Rotation) * -((m_Size.x * m_Scale.x) / 2) + sin(m_Rotation) * -(m_Size.y * m_Scale.y / 2) + m_Position.x;
+	m_Vertex[2].y = -(-sin(m_Rotation) * -((m_Size.x * m_Scale.x) / 2) + cos(m_Rotation) * -(m_Size.y * m_Scale.y / 2)) + m_Position.y;
+
+	m_Vertex[3].x = cos(m_Rotation) * ((m_Size.x * m_Scale.x) / 2) + sin(m_Rotation) * -(m_Size.y * m_Scale.y / 2) + m_Position.x;
+	m_Vertex[3].y = -(-sin(m_Rotation) * ((m_Size.x * m_Scale.x) / 2) + cos(m_Rotation) * -(m_Size.y * m_Scale.y / 2)) + m_Position.y;
+}
+
+void Object::DrawLine()
+{
+	LineMgr* line = new LineMgr();
+	Vec2 m_Vertex[4];
+
+	line->DrawLine(m_Vertex, 4);
+}
+
 void Object::Update(float deltaTime, float time)
 {
 }
