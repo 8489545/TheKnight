@@ -3,6 +3,7 @@ enum class Status
 {
 	IDLE,
 	RUN,
+	JUMP,
 	NONE
 };
 class Player : public Object
@@ -21,10 +22,15 @@ public:
 	Vec2 m_Directon;
 	int m_LandAngle;
 	int m_BaseAngle;
+
 	float m_Speed;
+	
+	float m_JumpPower;
+
 	Status m_PlayerStatus;
 
 	void Run();
+	void Grivity();
 	void SetDirection();
 
 	void Update(float deltaTime, float Time);

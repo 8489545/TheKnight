@@ -67,6 +67,11 @@ void Player::Run()
 	}
 }
 
+void Player::Grivity()
+{
+	m_Position.y -= GR * dt;
+}
+
 void Player::SetDirection()
 {
 	Vec2 rot;

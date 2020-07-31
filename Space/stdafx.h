@@ -3,6 +3,8 @@
 typedef struct D3DXVECTOR2 Vec2;
 typedef struct D3DXMATRIX Matrix;
 
+constexpr float GR = 9.8f;
+
 #define dt App::GetInst()->DeltaTime
 #define gt App::GetInst()->Time
 #define _USE_MATH_DEFINES
