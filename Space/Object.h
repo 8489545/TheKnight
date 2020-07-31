@@ -9,7 +9,7 @@ public:
 	Vec2 m_Size;
 	Vec2 m_RotationCenter;
 	Vec2 m_ScaleCenter;
-	Vec2 m_Vertex[4];
+	Vec2 m_Vertex[5];
 
 	float m_Radius;
 	float m_Rotation;
@@ -44,7 +44,6 @@ public:
 	void SetTag(const std::string tag);
 	void SetParent(Object* obj);
 	void SetVertex();
-	void DrawLine();
 public:
 	bool GetDestroy() { return m_Destroy; }
 };
