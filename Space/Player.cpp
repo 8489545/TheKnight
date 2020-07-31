@@ -18,6 +18,11 @@ Player::Player()
 	m_LRun->Init(7, true);
 	m_LRun->AddContinueFrame(L"Painting/Player/LRun/", 1, 8);
 
+	m_Jump = new Animation();
+	m_Jump->SetParent(this);
+	m_Jump->Init(7, true);
+	m_Jump->AddContinueFrame(L"Painting/Player/Jump/", 1, 4);
+
 	m_Player = m_Idle;
 	m_Player->SetParent(this);
 	m_PlayerStatus = Status::IDLE;
@@ -32,8 +37,11 @@ Player::Player()
 
 	m_BaseAngle = 0;
 	m_LandAngle = 0 + m_BaseAngle;
-
 	m_BaseAngle = 90;
+
+	m_JumpPower = 75.f;
+	m_JumpTime = 0;
+	m_JumpAccel = 1.f;
 }
 
 Player::~Player()
@@ -42,25 +50,25 @@ Player::~Player()
 
 void Player::Run()
 {
-	if (INPUT->GetKey(VK_RIGHT) == KeyState::PRESS)
+	if (INPUT->GetKey('D') == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
 	{
 		m_Player = m_RRun;
 		Translate(m_Directon.x * m_Speed * dt, m_Directon.y * -m_Speed * dt);
 		m_PlayerStatus = Status::RUN;
 	}
-	if (INPUT->GetKey(VK_RIGHT) == KeyState::UP)
+	if (INPUT->GetKey('D') == KeyState::UP && m_PlayerStatus == Status::RUN)
 	{
 		m_Player = m_Idle;
 		m_PlayerStatus = Status::IDLE;
 	}
 
-	if (INPUT->GetKey(VK_LEFT) == KeyState::PRESS)
+	if (INPUT->GetKey('A') == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
 	{
 		m_Player = m_LRun;
 		Translate(m_Directon.x * -m_Speed * dt, m_Directon.y * m_Speed * dt);
 		m_PlayerStatus = Status::RUN;
 	}
-	if (INPUT->GetKey(VK_LEFT) == KeyState::UP)
+	if (INPUT->GetKey('A') == KeyState::UP && m_PlayerStatus == Status::RUN)
 	{
 		m_Player = m_Idle;
 		m_PlayerStatus = Status::IDLE;
@@ -69,12 +77,47 @@ void Player::Run()
 
 void Player::Jump()
 {
+	if (m_Scale.x == -1)
+		m_Scale.x *= -1;
+	if (INPUT->GetKey(VK_SPACE) == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
+	{
+		m_JumpTime = 0;
+		Pos = m_Position;
+		m_PlayerStatus = Status::JUMP;
+	}
+	if (m_PlayerStatus == Status::JUMP)
+	{
+		m_Player = m_Jump;
+
+		m_JumpAccel = ((-GR) / 2 * m_JumpTime * m_JumpTime) + (m_JumpPower * m_JumpTime);
+		m_JumpTime += dt * 20;
+		m_Position.y = Pos.y - m_JumpAccel;
+
+		if (INPUT->GetKey('D') == KeyState::PRESS)
+		{
+			Translate(m_Speed * dt, m_Speed * dt);
+		}
+
+		if (INPUT->GetKey('A') == KeyState::PRESS)
+		{
+			if(m_Scale.x == 1)
+				m_Scale.x *= -1;
+
+			Translate(-m_Speed * dt,m_Speed * dt);
+		}
+		else
+		{
+		}
+		if (m_JumpAccel < 0.f)
+		{
+			m_Player = m_Idle;
+			m_PlayerStatus = Status::IDLE;
+		}
+	}
 }
 
 void Player::Gravity()
 {
-	if(m_Position.y <= 300.f)
-		m_Position.y -= GR * dt;
 }
 
 void Player::SetDirection()
@@ -90,9 +133,11 @@ void Player::SetDirection()
 
 void Player::Update(float deltaTime, float Time)
 {
+	//Camera::GetInst()->Follow(this);
 	SetDirection();
 	Run();
 	Gravity();
+	Jump();
 
 	SetVertex();
 	m_Player->Update(deltaTime,Time);
@@ -100,8 +145,8 @@ void Player::Update(float deltaTime, float Time)
 
 void Player::Render()
 {
-	m_Player->Render();
 	m_Line->DrawLine(m_Vertex, 5);
+	m_Player->Render();
 }
 
 void Player::OnCollision(Object* other)

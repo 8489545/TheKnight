@@ -11,6 +11,7 @@ class Player : public Object
 	Animation* m_Idle;
 	Animation* m_RRun;
 	Animation* m_LRun;
+	Animation* m_Jump;
 
 	Animation* m_Player;
 
@@ -25,8 +26,11 @@ public:
 
 	float m_Speed;
 	
+	Vec2 m_JumpPos;
 	float m_JumpTime;
 	float m_JumpPower;
+	float m_JumpAccel;
+	Vec2 Pos;
 
 	Status m_PlayerStatus;
 
