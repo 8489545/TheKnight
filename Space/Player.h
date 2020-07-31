@@ -25,12 +25,14 @@ public:
 
 	float m_Speed;
 	
+	float m_JumpTime;
 	float m_JumpPower;
 
 	Status m_PlayerStatus;
 
 	void Run();
-	void Grivity();
+	void Jump();
+	void Gravity();
 	void SetDirection();
 
 	void Update(float deltaTime, float Time);

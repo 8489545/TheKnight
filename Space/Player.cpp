@@ -67,9 +67,14 @@ void Player::Run()
 	}
 }
 
-void Player::Grivity()
+void Player::Jump()
 {
-	m_Position.y -= GR * dt;
+}
+
+void Player::Gravity()
+{
+	if(m_Position.y <= 300.f)
+		m_Position.y -= GR * dt;
 }
 
 void Player::SetDirection()
@@ -87,6 +92,7 @@ void Player::Update(float deltaTime, float Time)
 {
 	SetDirection();
 	Run();
+	Gravity();
 
 	SetVertex();
 	m_Player->Update(deltaTime,Time);
