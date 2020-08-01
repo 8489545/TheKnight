@@ -4,14 +4,15 @@ enum class Status
 	IDLE,
 	RUN,
 	JUMP,
+	ATTACK,
 	NONE
 };
 class Player : public Object
 {
 	Animation* m_Idle;
-	Animation* m_RRun;
-	Animation* m_LRun;
+	Animation* m_Run;
 	Animation* m_Jump;
+	Animation* m_Attack;
 
 	Animation* m_Player;
 
@@ -25,6 +26,8 @@ public:
 	int m_BaseAngle;
 
 	float m_Speed;
+
+	bool m_LastDireIsRight;
 	
 	Vec2 m_JumpPos;
 	float m_JumpTime;
@@ -34,9 +37,11 @@ public:
 
 	Status m_PlayerStatus;
 
+	void SetLookingDirection();
+	void Gravity();
 	void Run();
 	void Jump();
-	void Gravity();
+	void Attack();
 	void SetDirection();
 
 	void Update(float deltaTime, float Time);

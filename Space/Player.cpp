@@ -8,20 +8,20 @@ Player::Player()
 	m_Idle->Init(7, true);
 	m_Idle->AddContinueFrame(L"Painting/Player/Idle/", 1, 11);
 
-	m_RRun = new Animation();
-	m_RRun->SetParent(this);
-	m_RRun->Init(7, true);
-	m_RRun->AddContinueFrame(L"Painting/Player/RRun/", 1, 8);
-
-	m_LRun = new Animation();
-	m_LRun->SetParent(this);
-	m_LRun->Init(7, true);
-	m_LRun->AddContinueFrame(L"Painting/Player/LRun/", 1, 8);
+	m_Run = new Animation();
+	m_Run->SetParent(this);
+	m_Run->Init(7, true);
+	m_Run->AddContinueFrame(L"Painting/Player/Run/", 1, 8);
 
 	m_Jump = new Animation();
 	m_Jump->SetParent(this);
 	m_Jump->Init(7, true);
 	m_Jump->AddContinueFrame(L"Painting/Player/Jump/", 1, 4);
+
+	m_Attack = new Animation();
+	m_Attack->SetParent(this);
+	m_Attack->Init(7, true);
+	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, 6);
 
 	m_Player = m_Idle;
 	m_Player->SetParent(this);
@@ -42,9 +42,27 @@ Player::Player()
 	m_JumpPower = 75.f;
 	m_JumpTime = 0;
 	m_JumpAccel = 1.f;
+
+	m_LastDireIsRight = true;
 }
 
 Player::~Player()
+{
+}
+
+void Player::SetLookingDirection()
+{
+	if (m_LastDireIsRight)
+	{
+		m_Scale.x = 1;
+	}
+	else if (!m_LastDireIsRight)
+	{
+		m_Scale.x = -1;
+	}
+}
+
+void Player::Gravity()
 {
 }
 
@@ -52,7 +70,8 @@ void Player::Run()
 {
 	if (INPUT->GetKey('D') == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
 	{
-		m_Player = m_RRun;
+		m_LastDireIsRight = true;
+		m_Player = m_Run;
 		Translate(m_Directon.x * m_Speed * dt, m_Directon.y * -m_Speed * dt);
 		m_PlayerStatus = Status::RUN;
 	}
@@ -64,7 +83,8 @@ void Player::Run()
 
 	if (INPUT->GetKey('A') == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
 	{
-		m_Player = m_LRun;
+		m_LastDireIsRight = false;
+		m_Player = m_Run;
 		Translate(m_Directon.x * -m_Speed * dt, m_Directon.y * m_Speed * dt);
 		m_PlayerStatus = Status::RUN;
 	}
@@ -77,8 +97,6 @@ void Player::Run()
 
 void Player::Jump()
 {
-	if (m_Scale.x == -1)
-		m_Scale.x *= -1;
 	if (INPUT->GetKey(VK_SPACE) == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
 	{
 		m_JumpTime = 0;
@@ -96,17 +114,12 @@ void Player::Jump()
 		if (INPUT->GetKey('D') == KeyState::PRESS)
 		{
 			Translate(m_Speed * dt, m_Speed * dt);
+			m_LastDireIsRight = true;
 		}
-
 		if (INPUT->GetKey('A') == KeyState::PRESS)
 		{
-			if(m_Scale.x == 1)
-				m_Scale.x *= -1;
-
+			m_LastDireIsRight = false;
 			Translate(-m_Speed * dt,m_Speed * dt);
-		}
-		else
-		{
 		}
 		if (m_JumpAccel < 0.f)
 		{
@@ -116,7 +129,7 @@ void Player::Jump()
 	}
 }
 
-void Player::Gravity()
+void Player::Attack()
 {
 }
 
@@ -135,6 +148,7 @@ void Player::Update(float deltaTime, float Time)
 {
 	//Camera::GetInst()->Follow(this);
 	SetDirection();
+	SetLookingDirection();
 	Run();
 	Gravity();
 	Jump();
