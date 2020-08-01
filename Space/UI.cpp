@@ -12,10 +12,10 @@ UI::~UI()
 void UI::Init()
 {
 	m_BGHpBar = Sprite::Create(L"Painting/UI/BGHpBar.png");
-	m_BGHpBar->SetPosition(m_BGHpBar->m_Size.x / 2 + 50, 950);
+	m_BGHpBar->SetPosition(m_BGHpBar->m_Size.x / 2 + 10, 1000);
 
 	m_HpBar = Sprite::Create(L"Painting/UI/HpBar.png");
-	m_HpBar->SetPosition(m_BGHpBar->m_Size.x / 2 + 50, 950);
+	m_HpBar->SetPosition(m_BGHpBar->m_Size.x / 2 + 10, 1000);
 
 	m_HpText = new TextMgr();
 	m_HpText->Init(40, false, false, "Arial");
@@ -40,7 +40,7 @@ void UI::Render()
 
 	Renderer::GetInst()->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
 	m_HpText->print(std::to_string(m_Hp) + "/" + std::to_string(m_MaxHp) + "(" + 
-		std::to_string(m_Hp * m_MaxHp / m_MaxHp) + "%)", 400, 925);
+		std::to_string(m_Hp * m_MaxHp / m_MaxHp) + "%)", 400, 975);
 	Renderer::GetInst()->GetSprite()->End();
 	m_HpGage = m_HpBar->m_Size.x / m_MaxHp;
 

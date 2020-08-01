@@ -93,6 +93,9 @@
     <ClCompile Include="UI.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Castle.cpp">
+      <Filter>Game\Object\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Castle.h">
+      <Filter>Game\Object\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

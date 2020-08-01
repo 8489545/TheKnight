@@ -1,5 +1,5 @@
 #include"stdafx.h"
-#include"MainScene.h"
+#include"Castle.h"
 
 #pragma warning(disable:26495)
 
@@ -12,7 +12,7 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
 #endif
 	App::GetInst()->Init(1920, 1080, 1);
-	SceneDirector::GetInst()->ChangeScene(new MainScene());
+	SceneDirector::GetInst()->ChangeScene(new Castle());
 	App::GetInst()->Run();
 	return 0;
 }
