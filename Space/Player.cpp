@@ -22,7 +22,7 @@ Player::Player()
 
 	m_Attack = new Animation();
 	m_Attack->SetParent(this);
-	m_Attack->Init(10, true);
+	m_Attack->Init(14, true);
 	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, m_AttackLastFrame);
 
 	m_Player = m_Idle;
