@@ -35,6 +35,8 @@ public:
 	float m_JumpAccel;
 	Vec2 Pos;
 
+	int m_AttackLastFrame;
+
 	Status m_PlayerStatus;
 
 	void SetLookingDirection();

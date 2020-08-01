@@ -18,10 +18,12 @@ Player::Player()
 	m_Jump->Init(7, true);
 	m_Jump->AddContinueFrame(L"Painting/Player/Jump/", 1, 4);
 
+	m_AttackLastFrame = 7;
+
 	m_Attack = new Animation();
 	m_Attack->SetParent(this);
-	m_Attack->Init(7, true);
-	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, 6);
+	m_Attack->Init(10, true);
+	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, m_AttackLastFrame);
 
 	m_Player = m_Idle;
 	m_Player->SetParent(this);
@@ -131,6 +133,23 @@ void Player::Jump()
 
 void Player::Attack()
 {
+	if (INPUT->GetButtonDown() && (m_PlayerStatus != Status::ATTACK && m_PlayerStatus != Status::JUMP))
+	{
+		m_PlayerStatus = Status::ATTACK;
+		INPUT->ButtonDown(false);
+	}
+
+	if (m_PlayerStatus == Status::ATTACK)
+	{
+		m_Player = m_Attack;
+
+		if (m_Player->m_CurrentFrame == m_AttackLastFrame - 1)
+		{
+			m_Attack->m_CurrentFrame = 0;
+			m_PlayerStatus = Status::IDLE;
+			m_Player = m_Idle;
+		}
+	}
 }
 
 void Player::SetDirection()
@@ -147,11 +166,15 @@ void Player::SetDirection()
 void Player::Update(float deltaTime, float Time)
 {
 	//Camera::GetInst()->Follow(this);
+	Gravity();
 	SetDirection();
 	SetLookingDirection();
-	Run();
-	Gravity();
-	Jump();
+	if (m_PlayerStatus != Status::ATTACK)
+	{
+		Run();
+		Jump();
+	}
+	Attack();
 
 	SetVertex();
 	m_Player->Update(deltaTime,Time);
