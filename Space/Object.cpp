@@ -26,12 +26,17 @@ Object::~Object()
 Matrix Object::GetMatrix()
 {
 	Vec2 RotCenter = Vec2(0, 0);
+	Vec2 ScaleCenter = Vec2(0, 0);
+
 	if (m_Tag != "UI")
 	{
 		RotCenter.x = -Camera::GetInst()->m_Position.x + m_RotationCenter.x;
 		RotCenter.y = -Camera::GetInst()->m_Position.y + m_RotationCenter.y;
+
+		ScaleCenter.x = -Camera::GetInst()->m_Position.x + m_ScaleCenter.x;
+		ScaleCenter.y = -Camera::GetInst()->m_Position.y + m_ScaleCenter.y;
 	}
-	D3DXMatrixTransformation2D(&m_wMat, 0, 0, &m_Scale, &RotCenter, m_Rotation, &m_Position);
+	D3DXMatrixTransformation2D(&m_wMat, &ScaleCenter, 0, &m_Scale, &RotCenter, m_Rotation, &m_Position);
 
 	if (m_Parent)
 		m_wMat *= m_Parent->GetMatrix();

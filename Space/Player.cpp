@@ -170,7 +170,7 @@ void Player::Update(float deltaTime, float Time)
 {
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
-	//Camera::GetInst()->Follow(this);
+	Camera::GetInst()->Follow(this);
 	Gravity();
 	SetDirection();
 	SetLookingDirection();
