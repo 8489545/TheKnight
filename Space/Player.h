@@ -26,6 +26,8 @@ public:
 	int m_BaseAngle;
 
 	float m_Speed;
+	int m_Hp;
+	int m_MaxHp;
 
 	bool m_LastDireIsRight;
 	

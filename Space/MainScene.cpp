@@ -13,6 +13,8 @@ MainScene::~MainScene()
 void MainScene::Init()
 {
 	ObjMgr->AddObject(new Player(), "Player");
+
+	UI::GetInst()->Init();
 }
 
 void MainScene::Release()

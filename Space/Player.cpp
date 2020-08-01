@@ -45,6 +45,9 @@ Player::Player()
 	m_JumpTime = 0;
 	m_JumpAccel = 1.f;
 
+	m_Hp = 100;
+	m_MaxHp = 100;
+
 	m_LastDireIsRight = true;
 }
 
@@ -165,6 +168,8 @@ void Player::SetDirection()
 
 void Player::Update(float deltaTime, float Time)
 {
+	UI::GetInst()->m_Hp = m_Hp;
+	UI::GetInst()->m_MaxHp = m_MaxHp;
 	//Camera::GetInst()->Follow(this);
 	Gravity();
 	SetDirection();

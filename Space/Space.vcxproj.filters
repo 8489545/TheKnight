@@ -88,7 +88,10 @@
       <Filter>Game\Mgrs</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Game\Object\Scene</Filter>
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Game\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +156,10 @@
       <Filter>Game\Mgrs</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Game\Object\Scene</Filter>
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
