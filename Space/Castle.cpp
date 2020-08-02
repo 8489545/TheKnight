@@ -19,8 +19,8 @@ void Castle::Init()
 
 	UI::GetInst()->Init();
 
-	MapLimit::GetInst()->CreateMap(HORIZONTAL, 25, Vec2(-1920 / 2, m_BG->m_Size.y - 50));
 	MapLimit::GetInst()->CreateMap(VERTICAL, 20, Vec2(-1920 / 2, m_BG->m_Size.y + 300));
+	MapLimit::GetInst()->CreateMap(HORIZONTAL, 25, Vec2(-1920 / 2, m_BG->m_Size.y - 50));
 }
 
 void Castle::Release()
