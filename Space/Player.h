@@ -16,6 +16,10 @@ class Player : public Object
 
 	Animation* m_Player;
 
+	Sprite* m_ColBox;
+	Sprite* m_HeadCol;
+	Sprite* m_FootCol;
+
 	LineMgr* m_Line;
 public:
 	Player();
@@ -30,6 +34,7 @@ public:
 	int m_MaxHp;
 
 	bool m_LastDireIsRight;
+	bool m_isGround;
 	
 	Vec2 m_JumpPos;
 	float m_JumpTime;

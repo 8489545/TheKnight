@@ -42,5 +42,4 @@ void SceneDirector::Render()
 	ObjMgr->Render();
 
 	UI::GetInst()->Render();
-
 }

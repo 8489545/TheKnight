@@ -31,6 +31,15 @@ Player::Player()
 
 	SetPosition(1920 / 2, 1080 / 2);
 
+	m_ColBox = Sprite::Create(L"Painting/Player/ColBox.png");
+	m_ColBox->m_Position = m_Position;
+
+	m_HeadCol = Sprite::Create(L"Painting/Player/Head.png");
+	m_HeadCol->m_Position = m_Position;
+
+	m_FootCol = Sprite::Create(L"Painting/Player/Foot.png");
+	m_FootCol->m_Position = m_Position;
+
 	m_Line = new LineMgr();
 	m_Line->Init(1, true);
 	m_Line->SetColor(D3DXCOLOR(255, 255, 255, 255));
@@ -49,6 +58,7 @@ Player::Player()
 	m_MaxHp = 100;
 
 	m_LastDireIsRight = true;
+	m_isGround = false;
 }
 
 Player::~Player()
@@ -69,6 +79,15 @@ void Player::SetLookingDirection()
 
 void Player::Gravity()
 {
+	static float vy = 0;
+	vy += GR * dt;
+
+	if (!m_isGround)
+	{
+		m_Position.y += vy;
+	}
+	else
+		vy = 0.f;
 }
 
 void Player::Run()
@@ -168,12 +187,15 @@ void Player::SetDirection()
 
 void Player::Update(float deltaTime, float Time)
 {
+	m_isGround = false;
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
 	Camera::GetInst()->Follow(this);
+	ObjMgr->CollisionCheak(this, "Ground");
 	Gravity();
 	SetDirection();
 	SetLookingDirection();
+
 	if (m_PlayerStatus != Status::ATTACK)
 	{
 		Run();
@@ -183,14 +205,29 @@ void Player::Update(float deltaTime, float Time)
 
 	SetVertex();
 	m_Player->Update(deltaTime,Time);
+
+	m_ColBox->m_Position = Vec2(m_Position.x, m_Position.y + 50);
+	m_HeadCol->m_Position = Vec2(m_Position.x, m_ColBox->m_Position.y - 75);
+	m_FootCol->m_Position = Vec2(m_Position.x, m_ColBox->m_Position.y + 75);
 }
 
 void Player::Render()
 {
 	//m_Line->DrawLine(m_Vertex, 5);
 	m_Player->Render();
+	m_ColBox->Render();
+	m_HeadCol->Render();
+	m_FootCol->Render();
 }
 
 void Player::OnCollision(Object* other)
 {
+	if (other->m_Tag == "Ground")
+	{
+		RECT rc;
+		if (IntersectRect(&rc, &m_FootCol->m_Collision, &other->m_Collision))
+		{
+			m_isGround = true;
+		}
+	}
 }

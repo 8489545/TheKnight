@@ -77,6 +77,8 @@ void ObjectMgr::Render()
 
 	for (const auto& iter : m_Objects)
 	{
+		if (iter->m_Tag == "UI")
+			iter->m_Layer = 100;
 		(iter)->Render();
 	}
 }
