@@ -96,6 +96,9 @@
     <ClCompile Include="Castle.cpp">
       <Filter>Game\Object\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="MapLimit.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="Castle.h">
       <Filter>Game\Object\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLimit.h">
+      <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

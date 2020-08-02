@@ -18,6 +18,9 @@ void Castle::Init()
 	ObjMgr->AddObject(new Player(), "Player");
 
 	UI::GetInst()->Init();
+
+	MapLimit::GetInst()->CreateMap(HORIZONTAL, 20, Vec2(0, 1500));
+	MapLimit::GetInst()->CreateMap(VERTICAL, 20, Vec2(1920 / 2, 1080 / 2));
 }
 
 void Castle::Release()

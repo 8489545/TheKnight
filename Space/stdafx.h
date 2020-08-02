@@ -44,6 +44,7 @@ inline void SafeDelete(T*& x);
 #include"Animation.h"
 #include"EffectMgr.h"
 #include"UI.h"
+#include"MapLimit.h"
 //
 
 template<class T>
