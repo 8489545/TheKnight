@@ -52,13 +52,15 @@ Player::Player()
 
 	m_JumpPower = 75.f;
 	m_JumpTime = 0;
-	m_JumpAccel = 1.f;
+	m_JumpAccel = 0.f;
 
 	m_Hp = 100;
 	m_MaxHp = 100;
 
 	m_LastDireIsRight = true;
 	m_isGround = false;
+
+	m_Layer = 2;
 }
 
 Player::~Player()
@@ -129,12 +131,18 @@ void Player::Jump()
 	}
 	if (m_PlayerStatus == Status::JUMP)
 	{
+		static float minus;
 		m_Player = m_Jump;
 
 		m_JumpAccel = ((-GR) / 2 * m_JumpTime * m_JumpTime) + (m_JumpPower * m_JumpTime);
-		m_JumpTime += dt * 20;
+		m_JumpTime += dt * 20.f;
 		m_Position.y = Pos.y - m_JumpAccel;
 
+		if (m_JumpAccel < 0.f)
+		{
+			printf("%f \n", minus);
+			minus = m_JumpAccel;
+		}
 		if (INPUT->GetKey('D') == KeyState::PRESS)
 		{
 			Translate(m_Speed * dt, m_Speed * dt);
@@ -147,6 +155,7 @@ void Player::Jump()
 		}
 		if (m_JumpAccel < 0.f)
 		{
+			m_Position.y += minus;
 			m_Player = m_Idle;
 			m_PlayerStatus = Status::IDLE;
 		}
@@ -192,6 +201,7 @@ void Player::Update(float deltaTime, float Time)
 	UI::GetInst()->m_MaxHp = m_MaxHp;
 	Camera::GetInst()->Follow(this);
 	ObjMgr->CollisionCheak(this, "Ground");
+	if(m_PlayerStatus != Status::JUMP)
 	Gravity();
 	SetDirection();
 	SetLookingDirection();
