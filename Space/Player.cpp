@@ -73,6 +73,7 @@ Player::Player()
 
 	m_Damage = 25;
 	m_AttackLate = 0.f;
+	m_JumpLate = 0.f;
 }
 
 Player::~Player()
@@ -137,7 +138,7 @@ void Player::Run()
 
 void Player::Jump()
 {
-	if (INPUT->GetKey(VK_SPACE) == KeyState::PRESS && m_PlayerStatus != Status::JUMP)
+	if (INPUT->GetKey(VK_SPACE) == KeyState::PRESS && m_PlayerStatus != Status::JUMP && m_JumpLate <= 0.f)
 	{
 		m_JumpTime = 0;
 		Pos = m_Position;
@@ -156,23 +157,28 @@ void Player::Jump()
 		{
 			minus = m_JumpAccel;
 		}
-		if (INPUT->GetKey('D') == KeyState::PRESS)
+		if (m_JumpAccel >= 0.f)
 		{
-			if (!m_RightCol)
-				Translate(m_Speed * dt, m_Speed * dt);
-			m_LastDireIsRight = true;
-		}
-		if (INPUT->GetKey('A') == KeyState::PRESS)
-		{
-			m_LastDireIsRight = false;
-			if (!m_LeftCol)
-				Translate(-m_Speed * dt,m_Speed * dt);
+			if (INPUT->GetKey('D') == KeyState::PRESS)
+			{
+				if (!m_RightCol)
+					Translate(m_Speed * dt, m_Speed * dt);
+				m_LastDireIsRight = true;
+			}
+			if (INPUT->GetKey('A') == KeyState::PRESS)
+			{
+				m_LastDireIsRight = false;
+				if (!m_LeftCol)
+					Translate(-m_Speed * dt, m_Speed * dt);
+			}
 		}
 		if (m_JumpAccel < 0.f)
 		{
-			m_Position.y += minus;
+			printf("%f \n", m_Position.y);
+			m_JumpLate = 0.1f;
 			m_Player = m_Idle;
 			m_PlayerStatus = Status::IDLE;
+			m_Position.y += minus;
 		}
 	}
 }
@@ -218,6 +224,8 @@ void Player::Update(float deltaTime, float Time)
 
 	if(m_AttackLate > 0)
 		m_AttackLate -= dt;
+	if (m_JumpLate > 0)
+		m_JumpLate -= dt;
 
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;

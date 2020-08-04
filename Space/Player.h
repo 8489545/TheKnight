@@ -51,6 +51,8 @@ public:
 	float m_JumpTime;
 	float m_JumpPower;
 	float m_JumpAccel;
+	float m_JumpLate;
+
 	Vec2 Pos;
 
 	int m_AttackLastFrame;
