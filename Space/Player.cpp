@@ -29,7 +29,7 @@ Player::Player()
 	m_Player->SetParent(this);
 	m_PlayerStatus = Status::IDLE;
 
-	SetPosition(1920 / 2, 1080 / 2);
+	SetPosition(1920 / 2, 1500);
 
 	m_ColBox = Sprite::Create(L"Painting/Player/ColBox.png");
 	m_ColBox->m_Position = m_Position;
@@ -70,6 +70,9 @@ Player::Player()
 
 	m_RightCol = false;
 	m_LeftCol = false;
+
+	m_Damage = 25;
+	m_AttackLate = 0.f;
 }
 
 Player::~Player()
@@ -151,7 +154,6 @@ void Player::Jump()
 
 		if (m_JumpAccel < 0.f)
 		{
-			printf("%f \n", minus);
 			minus = m_JumpAccel;
 		}
 		if (INPUT->GetKey('D') == KeyState::PRESS)
@@ -189,6 +191,7 @@ void Player::Attack()
 
 		if (m_Player->m_CurrentFrame == m_AttackLastFrame - 1)
 		{
+			m_AttackLate = 0.3f;
 			m_Attack->m_CurrentFrame = 0;
 			m_PlayerStatus = Status::IDLE;
 			m_Player = m_Idle;
@@ -213,6 +216,9 @@ void Player::Update(float deltaTime, float Time)
 	m_RightCol = false;
 	m_LeftCol = false;
 
+	if(m_AttackLate > 0)
+		m_AttackLate -= dt;
+
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
 	Camera::GetInst()->Follow(this);
@@ -228,7 +234,8 @@ void Player::Update(float deltaTime, float Time)
 		Run();
 		Jump();
 	}
-	Attack();
+	if(m_AttackLate <= 0)
+		Attack();
 
 	SetVertex();
 	m_Player->Update(deltaTime,Time);

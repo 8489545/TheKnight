@@ -35,6 +35,12 @@ public:
 	int m_Hp;
 	int m_MaxHp;
 
+	int m_Mp;
+	int m_MaxMp;
+
+	float m_AttackLate;
+	float m_Damage;
+
 	bool m_LastDireIsRight;
 	bool m_isGround;
 
