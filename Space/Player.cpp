@@ -63,6 +63,9 @@ Player::Player()
 	m_Hp = 100;
 	m_MaxHp = 100;
 
+	m_Mp = 100;
+	m_MaxMp = 100;
+
 	m_LastDireIsRight = true;
 	m_isGround = false;
 
@@ -229,6 +232,8 @@ void Player::Update(float deltaTime, float Time)
 
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
+	UI::GetInst()->m_Mp = m_Mp;
+	UI::GetInst()->m_MaxMp = m_MaxMp;
 	Camera::GetInst()->Follow(this);
 	ObjMgr->CollisionCheak(this, "Ground");
 	ObjMgr->CollisionCheak(this, "Wall");
