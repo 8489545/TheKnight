@@ -5,6 +5,7 @@ enum class Status
 	RUN,
 	JUMP,
 	ATTACK,
+	DASH,
 	NONE
 };
 class Player : public Object
@@ -13,6 +14,7 @@ class Player : public Object
 	Animation* m_Run;
 	Animation* m_Jump;
 	Animation* m_Attack;
+	Animation* m_Dash;
 
 	Animation* m_Player;
 
@@ -59,11 +61,15 @@ public:
 
 	Status m_PlayerStatus;
 
+	float m_DashCooldown;
+	float m_DashTime;
+
 	void SetLookingDirection();
 	void Gravity();
 	void Run();
 	void Jump();
 	void Attack();
+	void Dash();
 	void SetDirection();
 
 	void Update(float deltaTime, float Time);

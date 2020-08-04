@@ -25,6 +25,11 @@ Player::Player()
 	m_Attack->Init(14, true);
 	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, m_AttackLastFrame);
 
+	m_Dash = new Animation();
+	m_Dash->SetParent(this);
+	m_Dash->Init(14, true);
+	m_Dash->AddContinueFrame(L"Painting/Player/Dash/", 1, 4);
+
 	m_Player = m_Idle;
 	m_Player->SetParent(this);
 	m_PlayerStatus = Status::IDLE;
@@ -77,6 +82,9 @@ Player::Player()
 	m_Damage = 25;
 	m_AttackLate = 0.f;
 	m_JumpLate = 0.f;
+
+	m_DashCooldown = 0.f;
+	m_DashTime = 0.1f;
 }
 
 Player::~Player()
@@ -177,7 +185,6 @@ void Player::Jump()
 		}
 		if (m_JumpAccel < 0.f)
 		{
-			printf("%f \n", m_Position.y);
 			m_JumpLate = 0.1f;
 			m_Player = m_Idle;
 			m_PlayerStatus = Status::IDLE;
@@ -208,6 +215,50 @@ void Player::Attack()
 	}
 }
 
+void Player::Dash()
+{
+	if (m_DashCooldown >= 0.f && m_PlayerStatus != Status::DASH)
+	{
+		if (INPUT->GetKey(VK_SHIFT) == KeyState::DOWN)
+		{
+			if (INPUT->GetKey('D') == KeyState::PRESS)
+			{
+				m_LastDireIsRight = true;
+				m_Player = m_Dash;
+				m_PlayerStatus = Status::DASH;
+			}
+			if (INPUT->GetKey('A') == KeyState::PRESS)
+			{
+				m_LastDireIsRight = false;
+				m_Player = m_Dash;
+				m_PlayerStatus = Status::DASH;
+			}
+		}
+	}
+
+	if (m_PlayerStatus == Status::DASH)
+	{
+		m_DashTime -= dt;
+		if (m_LastDireIsRight)
+		{
+			if (!m_RightCol)
+				m_Position.x += 5000 * dt;
+		}
+		else if (!m_LastDireIsRight)
+		{
+			if (!m_LeftCol)
+				m_Position.x -= 5000 * dt;
+		}
+
+		if (m_DashTime <= 0.f)
+		{
+			m_DashTime = 0.15f;
+			m_Player = m_Idle;
+			m_PlayerStatus = Status::IDLE;
+		}
+	}
+}
+
 void Player::SetDirection()
 {
 	Vec2 rot;
@@ -229,6 +280,8 @@ void Player::Update(float deltaTime, float Time)
 		m_AttackLate -= dt;
 	if (m_JumpLate > 0)
 		m_JumpLate -= dt;
+	if (m_DashCooldown > 0)
+		m_DashCooldown -= dt;
 
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
@@ -242,13 +295,18 @@ void Player::Update(float deltaTime, float Time)
 	SetDirection();
 	SetLookingDirection();
 
-	if (m_PlayerStatus != Status::ATTACK)
+	if (m_PlayerStatus != Status::DASH)
 	{
-		Run();
-		Jump();
+		if (m_PlayerStatus != Status::ATTACK)
+		{
+			Run();
+			Jump();
+		}
+		if (m_AttackLate <= 0)
+			Attack();
 	}
-	if(m_AttackLate <= 0)
-		Attack();
+
+	Dash();
 
 	SetVertex();
 	m_Player->Update(deltaTime,Time);
