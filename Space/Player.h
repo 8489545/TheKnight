@@ -19,6 +19,8 @@ class Player : public Object
 	Sprite* m_ColBox;
 	Sprite* m_HeadCol;
 	Sprite* m_FootCol;
+	Sprite* m_Left;
+	Sprite* m_Right;
 
 	LineMgr* m_Line;
 public:
@@ -35,6 +37,9 @@ public:
 
 	bool m_LastDireIsRight;
 	bool m_isGround;
+
+	bool m_RightCol;
+	bool m_LeftCol;
 	
 	Vec2 m_JumpPos;
 	float m_JumpTime;

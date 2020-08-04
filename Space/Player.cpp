@@ -40,6 +40,12 @@ Player::Player()
 	m_FootCol = Sprite::Create(L"Painting/Player/Foot.png");
 	m_FootCol->m_Position = m_Position;
 
+	m_Left = Sprite::Create(L"Painting/Player/Side.png");
+	m_Left->m_Position = m_Position;
+
+	m_Right = Sprite::Create(L"Painting/Player/Side.png");
+	m_Right->m_Position = m_Position;
+
 	m_Line = new LineMgr();
 	m_Line->Init(1, true);
 	m_Line->SetColor(D3DXCOLOR(255, 255, 255, 255));
@@ -61,6 +67,9 @@ Player::Player()
 	m_isGround = false;
 
 	m_Layer = 2;
+
+	m_RightCol = false;
+	m_LeftCol = false;
 }
 
 Player::~Player()
@@ -98,7 +107,8 @@ void Player::Run()
 	{
 		m_LastDireIsRight = true;
 		m_Player = m_Run;
-		Translate(m_Directon.x * m_Speed * dt, m_Directon.y * -m_Speed * dt);
+		if(!m_RightCol)
+			Translate(m_Directon.x * m_Speed * dt, m_Directon.y * -m_Speed * dt);
 		m_PlayerStatus = Status::RUN;
 	}
 	if (INPUT->GetKey('D') == KeyState::UP && m_PlayerStatus == Status::RUN)
@@ -111,7 +121,8 @@ void Player::Run()
 	{
 		m_LastDireIsRight = false;
 		m_Player = m_Run;
-		Translate(m_Directon.x * -m_Speed * dt, m_Directon.y * m_Speed * dt);
+		if (!m_LeftCol)
+			Translate(m_Directon.x * -m_Speed * dt, m_Directon.y * m_Speed * dt);
 		m_PlayerStatus = Status::RUN;
 	}
 	if (INPUT->GetKey('A') == KeyState::UP && m_PlayerStatus == Status::RUN)
@@ -145,13 +156,15 @@ void Player::Jump()
 		}
 		if (INPUT->GetKey('D') == KeyState::PRESS)
 		{
-			Translate(m_Speed * dt, m_Speed * dt);
+			if (!m_RightCol)
+				Translate(m_Speed * dt, m_Speed * dt);
 			m_LastDireIsRight = true;
 		}
 		if (INPUT->GetKey('A') == KeyState::PRESS)
 		{
 			m_LastDireIsRight = false;
-			Translate(-m_Speed * dt,m_Speed * dt);
+			if (!m_LeftCol)
+				Translate(-m_Speed * dt,m_Speed * dt);
 		}
 		if (m_JumpAccel < 0.f)
 		{
@@ -197,10 +210,14 @@ void Player::SetDirection()
 void Player::Update(float deltaTime, float Time)
 {
 	m_isGround = false;
+	m_RightCol = false;
+	m_LeftCol = false;
+
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
 	Camera::GetInst()->Follow(this);
 	ObjMgr->CollisionCheak(this, "Ground");
+	ObjMgr->CollisionCheak(this, "Wall");
 	if(m_PlayerStatus != Status::JUMP)
 	Gravity();
 	SetDirection();
@@ -219,15 +236,19 @@ void Player::Update(float deltaTime, float Time)
 	m_ColBox->m_Position = Vec2(m_Position.x, m_Position.y + 50);
 	m_HeadCol->m_Position = Vec2(m_Position.x, m_ColBox->m_Position.y - 75);
 	m_FootCol->m_Position = Vec2(m_Position.x, m_ColBox->m_Position.y + 75);
+	m_Left->m_Position = Vec2(m_Position.x - m_ColBox->m_Size.x / 2, m_ColBox->m_Position.y);
+	m_Right->m_Position = Vec2(m_Position.x + m_ColBox->m_Size.x / 2, m_ColBox->m_Position.y);
 }
 
 void Player::Render()
 {
-	//m_Line->DrawLine(m_Vertex, 5);
+	m_Line->DrawLine(m_Vertex, 5);
 	m_Player->Render();
 	m_ColBox->Render();
 	m_HeadCol->Render();
 	m_FootCol->Render();
+	m_Left->Render();
+	m_Right->Render();
 }
 
 void Player::OnCollision(Object* other)
@@ -238,6 +259,21 @@ void Player::OnCollision(Object* other)
 		if (IntersectRect(&rc, &m_FootCol->m_Collision, &other->m_Collision))
 		{
 			m_isGround = true;
+		}
+	}
+	if (other->m_Tag == "Wall")
+	{
+		RECT rc;
+		if (IntersectRect(&rc, &m_ColBox->m_Collision, &other->m_Collision))
+		{
+			if (IntersectRect(&rc, &m_Left->m_Collision, &other->m_Collision))
+			{
+				m_LeftCol = true;
+			}
+			else if (IntersectRect(&rc, &m_Right->m_Collision, &other->m_Collision))
+			{
+				m_RightCol = true;
+			}
 		}
 	}
 }
