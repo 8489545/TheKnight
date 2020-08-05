@@ -217,7 +217,7 @@ void Player::Attack()
 
 void Player::Dash()
 {
-	if (m_DashCooldown >= 0.f && m_PlayerStatus != Status::DASH)
+	if (m_DashCooldown <= 0.f && m_PlayerStatus != Status::DASH)
 	{
 		if (INPUT->GetKey(VK_SHIFT) == KeyState::DOWN)
 		{
@@ -249,10 +249,10 @@ void Player::Dash()
 			if (!m_LeftCol)
 				m_Position.x -= 5000 * dt;
 		}
-
 		if (m_DashTime <= 0.f)
 		{
 			m_DashTime = 0.15f;
+			m_DashCooldown = 15.f;
 			m_Player = m_Idle;
 			m_PlayerStatus = Status::IDLE;
 		}
@@ -287,6 +287,8 @@ void Player::Update(float deltaTime, float Time)
 	UI::GetInst()->m_MaxHp = m_MaxHp;
 	UI::GetInst()->m_Mp = m_Mp;
 	UI::GetInst()->m_MaxMp = m_MaxMp;
+	UI::GetInst()->m_DashCooldown = m_DashCooldown;
+
 	Camera::GetInst()->Follow(this);
 	ObjMgr->CollisionCheak(this, "Ground");
 	ObjMgr->CollisionCheak(this, "Wall");

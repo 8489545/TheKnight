@@ -23,6 +23,11 @@ void UI::Init()
 	m_MpBar = Sprite::Create(L"Painting/UI/MpBar.png");
 	m_MpBar->SetPosition(m_BGMpBar->m_Size.x / 2 + 10, 985);
 
+	m_DashUI = Sprite::Create(L"Painting/UI/DashUI.png");
+	m_DashUI->SetPosition(1500, 950);
+	m_DashBlind = Sprite::Create(L"Painting/UI/Blind.png");
+	m_DashBlind->SetPosition(1500, 957);
+
 	m_HpText = new TextMgr();
 	m_HpText->Init(40, false, false, "Arial");
 	m_HpText->SetColor(255, 255, 255, 255);
@@ -31,11 +36,18 @@ void UI::Init()
 	m_MpText->Init(20, false, false, "Arial");
 	m_MpText->SetColor(255, 255, 255, 255);
 
+	m_DashText = new TextMgr();
+	m_DashText->Init(72, false, false, "Arial");
+	m_DashText->SetColor(255, 255, 255, 255);
+
 	ObjMgr->AddObject(m_BGHpBar, "UI");
 	ObjMgr->AddObject(m_HpBar, "UI");
 
 	ObjMgr->AddObject(m_BGMpBar, "UI");
 	ObjMgr->AddObject(m_MpBar, "UI");
+
+	ObjMgr->AddObject(m_DashUI, "UI");
+	ObjMgr->AddObject(m_DashBlind, "UI");
 }
 
 void UI::Release()
@@ -52,11 +64,15 @@ void UI::Render()
 		m_Hp = 0;
 
 	Renderer::GetInst()->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+
 	m_HpText->print(std::to_string(m_Hp) + "/" + std::to_string(m_MaxHp) + "(" + 
 		std::to_string(m_Hp * m_MaxHp / m_MaxHp) + "%)", 400, 925);
 
 	m_MpText->print(std::to_string(m_Mp) + "/" + std::to_string(m_MaxMp) + "(" +
 		std::to_string(m_Mp * m_MaxMp / m_MaxMp) + "%)", 400, m_BGMpBar->m_Position.y - 10);
+
+	m_DashText->print(std::to_string((int)m_DashCooldown),m_DashBlind->m_Position.x - 30,m_DashBlind->m_Position.y - 50);
+
 	Renderer::GetInst()->GetSprite()->End();
 	m_HpGage = m_HpBar->m_Size.x / m_MaxHp;
 

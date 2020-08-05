@@ -4,12 +4,16 @@ class UI : public Singleton<UI>
 	Sprite* m_BGHpBar;
 	Sprite* m_HpBar;
 
-	TextMgr* m_HpText;
-
 	Sprite* m_BGMpBar;
 	Sprite* m_MpBar;
 
+	Sprite* m_DashUI;
+	Sprite* m_DashBlind;
+
+	TextMgr* m_HpText;
 	TextMgr* m_MpText;
+	TextMgr* m_DashText;
+
 public:
 	UI();
 	~UI();
@@ -21,6 +25,8 @@ public:
 	int m_MaxMp;
 	int m_Mp;
 	float m_MpGage;
+
+	float m_DashCooldown;
 
 	void Init();
 	void Release();
