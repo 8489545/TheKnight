@@ -64,12 +64,17 @@ public:
 	float m_DashCooldown;
 	float m_DashTime;
 
+	float m_HealCooldown;
+
+	float m_MpRegenTime;
+
 	void SetLookingDirection();
 	void Gravity();
 	void Run();
 	void Jump();
 	void Attack();
 	void Dash();
+	void Heal();
 	void SetDirection();
 
 	void Update(float deltaTime, float Time);

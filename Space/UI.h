@@ -10,9 +10,13 @@ class UI : public Singleton<UI>
 	Sprite* m_DashUI;
 	Sprite* m_DashBlind;
 
+	Sprite* m_HealUI;
+	Sprite* m_HealBlind;
+
 	TextMgr* m_HpText;
 	TextMgr* m_MpText;
 	TextMgr* m_DashText;
+	TextMgr* m_HealText;
 
 public:
 	UI();
@@ -27,6 +31,7 @@ public:
 	float m_MpGage;
 
 	float m_DashCooldown;
+	float m_HealCooldown;
 
 	void Init();
 	void Release();

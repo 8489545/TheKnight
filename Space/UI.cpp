@@ -28,6 +28,11 @@ void UI::Init()
 	m_DashBlind = Sprite::Create(L"Painting/UI/Blind.png");
 	m_DashBlind->SetPosition(1500, 957);
 
+	m_HealUI = Sprite::Create(L"Painting/UI/HealUI.png");
+	m_HealUI->SetPosition(1650, 950);
+	m_HealBlind = Sprite::Create(L"Painting/UI/Blind.png");
+	m_HealBlind->SetPosition(1650, 957);
+
 	m_HpText = new TextMgr();
 	m_HpText->Init(40, false, false, "Arial");
 	m_HpText->SetColor(255, 255, 255, 255);
@@ -40,6 +45,10 @@ void UI::Init()
 	m_DashText->Init(72, false, false, "Arial");
 	m_DashText->SetColor(255, 255, 255, 255);
 
+	m_HealText = new TextMgr();
+	m_HealText->Init(72, false, false, "Arial");
+	m_HealText->SetColor(255, 255, 255, 255);
+
 	ObjMgr->AddObject(m_BGHpBar, "UI");
 	ObjMgr->AddObject(m_HpBar, "UI");
 
@@ -48,6 +57,9 @@ void UI::Init()
 
 	ObjMgr->AddObject(m_DashUI, "UI");
 	ObjMgr->AddObject(m_DashBlind, "UI");
+
+	ObjMgr->AddObject(m_HealUI, "UI");
+	ObjMgr->AddObject(m_HealBlind, "UI");
 }
 
 void UI::Release()
@@ -72,6 +84,8 @@ void UI::Render()
 		std::to_string(m_Mp * m_MaxMp / m_MaxMp) + "%)", 400, m_BGMpBar->m_Position.y - 10);
 
 	m_DashText->print(std::to_string((int)m_DashCooldown),m_DashBlind->m_Position.x - 30,m_DashBlind->m_Position.y - 50);
+
+	m_DashText->print(std::to_string((int)m_HealCooldown), m_HealBlind->m_Position.x - 30, m_HealBlind->m_Position.y - 50);
 
 	Renderer::GetInst()->GetSprite()->End();
 	m_HpGage = m_HpBar->m_Size.x / m_MaxHp;

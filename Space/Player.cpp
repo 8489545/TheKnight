@@ -85,6 +85,8 @@ Player::Player()
 
 	m_DashCooldown = 0.f;
 	m_DashTime = 0.1f;
+
+	m_MpRegenTime = 5.f;
 }
 
 Player::~Player()
@@ -217,18 +219,20 @@ void Player::Attack()
 
 void Player::Dash()
 {
-	if (m_DashCooldown <= 0.f && m_PlayerStatus != Status::DASH)
+	if (m_DashCooldown <= 0.f && m_PlayerStatus != Status::DASH && m_Mp - 25 >= 0)
 	{
 		if (INPUT->GetKey(VK_SHIFT) == KeyState::DOWN)
 		{
 			if (INPUT->GetKey('D') == KeyState::PRESS)
 			{
+				m_Mp -= 25;
 				m_LastDireIsRight = true;
 				m_Player = m_Dash;
 				m_PlayerStatus = Status::DASH;
 			}
 			if (INPUT->GetKey('A') == KeyState::PRESS)
 			{
+				m_Mp -= 25;
 				m_LastDireIsRight = false;
 				m_Player = m_Dash;
 				m_PlayerStatus = Status::DASH;
@@ -259,6 +263,30 @@ void Player::Dash()
 	}
 }
 
+void Player::Heal()
+{
+	if (m_HealCooldown <= 0.f && m_Mp - 20 >= 0 && m_Hp < m_MaxHp)
+	{
+		if (INPUT->GetKey('F') == KeyState::DOWN)
+		{
+			if (m_MaxHp * 20 / 100 + m_Hp >= m_MaxHp)
+			{
+				m_Hp = m_MaxHp;
+			}
+			else
+			{
+				m_Hp += m_MaxHp * 20 / 100;
+			}
+			m_HealCooldown += 30;
+			m_Mp -= 20;
+		}
+	}
+	if (INPUT->GetKey('1') == KeyState::DOWN)
+	{
+		m_Hp -= 50;
+	}
+}
+
 void Player::SetDirection()
 {
 	Vec2 rot;
@@ -282,18 +310,35 @@ void Player::Update(float deltaTime, float Time)
 		m_JumpLate -= dt;
 	if (m_DashCooldown > 0)
 		m_DashCooldown -= dt;
+	if (m_HealCooldown > 0)
+		m_HealCooldown -= dt;
 
+	m_MpRegenTime += dt;
+
+	if (m_MpRegenTime >= 1.f)
+	{
+		m_Mp += 2;
+
+		if (m_Mp > m_MaxMp)
+			m_Mp = m_MaxMp;
+
+		m_MpRegenTime = 0.f;
+	}
 	UI::GetInst()->m_Hp = m_Hp;
 	UI::GetInst()->m_MaxHp = m_MaxHp;
 	UI::GetInst()->m_Mp = m_Mp;
 	UI::GetInst()->m_MaxMp = m_MaxMp;
 	UI::GetInst()->m_DashCooldown = m_DashCooldown;
+	UI::GetInst()->m_HealCooldown = m_HealCooldown;
 
 	Camera::GetInst()->Follow(this);
+
 	ObjMgr->CollisionCheak(this, "Ground");
 	ObjMgr->CollisionCheak(this, "Wall");
+
 	if(m_PlayerStatus != Status::JUMP)
-	Gravity();
+		Gravity();
+
 	SetDirection();
 	SetLookingDirection();
 
@@ -307,7 +352,7 @@ void Player::Update(float deltaTime, float Time)
 		if (m_AttackLate <= 0)
 			Attack();
 	}
-
+	Heal();
 	Dash();
 
 	SetVertex();
