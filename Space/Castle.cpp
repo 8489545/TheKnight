@@ -17,7 +17,7 @@ void Castle::Init()
 	m_BG->SetPosition(1920 / 2, m_BG->m_Size.y / 2);
 
 	ObjMgr->AddObject(new Player(), "Player");
-	ObjMgr->AddObject(new Monster1(Vec2(960,1991)), "Monster");
+	ObjMgr->AddObject(new Monster1(Vec2(960,1700)), "Monster");
 
 	UI::GetInst()->Init();
 

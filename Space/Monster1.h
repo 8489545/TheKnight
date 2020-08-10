@@ -17,6 +17,11 @@ public:
 
 	Status m_Status;
 
+	float vy;
+	bool m_isGround;
+
+	void Gravity();
+
 	void Update(float deltaTime, float Time);
 	void Render();
 	void OnCollision(Object* other);

@@ -29,10 +29,24 @@ Monster1::Monster1(Vec2 Pos)
 	m_Line->SetColor(D3DXCOLOR(255, 255, 255, 255));
 
 	m_Layer = 2;
+	vy = 0;
+	m_isGround = false;
 }
 
 Monster1::~Monster1()
 {
+}
+
+void Monster1::Gravity()
+{
+	vy += GR * dt;
+
+	if (!m_isGround)
+	{
+		m_Position.y += vy;
+	}
+	else
+		vy = 0.f;
 }
 
 void Monster1::Update(float deltaTime, float Time)
@@ -41,6 +55,11 @@ void Monster1::Update(float deltaTime, float Time)
 	m_RightBox->SetPosition(m_Position.x + m_ColBox->m_Size.x / 2, m_ColBox->m_Position.y);
 	m_LeftBox->SetPosition(m_Position.x - m_ColBox->m_Size.x / 2, m_ColBox->m_Position.y);
 	m_Foot->SetPosition(m_Position.x, (m_ColBox->m_Position.y + m_ColBox->m_Size.y / 2) - m_Foot->m_Size.y / 2);
+
+	ObjMgr->CollisionCheak(this, "Ground");
+	ObjMgr->CollisionCheak(this, "Wall");
+
+	Gravity();
 
 	SetVertex();
 	m_Monster->Update(deltaTime, Time);
@@ -59,4 +78,12 @@ void Monster1::Render()
 
 void Monster1::OnCollision(Object* other)
 {
+	if (other->m_Tag == "Ground")
+	{
+		RECT rc;
+		if (IntersectRect(&rc, &m_Foot->m_Collision, &other->m_Collision))
+		{
+			m_isGround = true;
+		}
+	}
 }
