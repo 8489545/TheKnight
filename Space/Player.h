@@ -1,13 +1,4 @@
 #pragma once
-enum class Status
-{
-	IDLE,
-	RUN,
-	JUMP,
-	ATTACK,
-	DASH,
-	NONE
-};
 class Player : public Object
 {
 	Animation* m_Idle;

@@ -8,7 +8,12 @@ Monster1::Monster1(Vec2 Pos)
 	m_Attack->AddContinueFrame(L"Painting/Monster/Monster1/Attack/", 1, 8);
 	m_Attack->SetParent(this);
 
-	m_Monster = m_Attack;
+	m_Idle = new Animation();
+	m_Idle->Init(3, true);
+	m_Idle->AddContinueFrame(L"Painting/Monster/Monster1/Idle/", 1, 4);
+	m_Idle->SetParent(this);
+
+	m_Monster = m_Idle;
 	m_Monster->SetParent(this);
 
 	m_Position = Pos;

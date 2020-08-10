@@ -2,6 +2,7 @@
 class Monster1 : public Object
 {
 	Animation* m_Attack;
+	Animation* m_Idle;
 	Animation* m_Monster;
 
 	LineMgr* m_Line;

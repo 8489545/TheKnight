@@ -1,4 +1,13 @@
 #pragma once
+enum class Status
+{
+	IDLE,
+	RUN,
+	JUMP,
+	ATTACK,
+	DASH,
+	NONE
+};
 class Object
 {
 public:
