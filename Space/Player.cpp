@@ -352,8 +352,6 @@ void Player::Update(float deltaTime, float Time)
 	SetDirection();
 	SetLookingDirection();
 
-	printf("%f %f \n", m_Position.x, m_Position.y);
-
 	if (m_PlayerStatus != Status::DASH)
 	{
 		if (m_PlayerStatus != Status::ATTACK)

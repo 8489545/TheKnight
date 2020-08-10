@@ -3,12 +3,17 @@ class Monster1 : public Object
 {
 	Animation* m_Attack;
 	Animation* m_Idle;
+	Animation* m_Run;
+	Animation* m_Hit;
+	Animation* m_Death;
 	Animation* m_Monster;
 
 	Sprite* m_ColBox;
 	Sprite* m_RightBox;
 	Sprite* m_LeftBox;
 	Sprite* m_Foot;
+
+	Sprite* m_Sight;
 
 	LineMgr* m_Line;
 public:
@@ -19,6 +24,14 @@ public:
 
 	float vy;
 	bool m_isGround;
+	bool m_isRight;
+	bool m_RightCol;
+	bool m_LeftCol;
+
+	float m_Speed;
+
+	float m_MoveTime;
+	int m_MoveDist;
 
 	void Gravity();
 
