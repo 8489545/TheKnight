@@ -27,6 +27,7 @@ public:
 	RECT m_Collision;
 
 	bool m_Visible;
+	bool m_isCollision;
 
 	int m_Layer;
 	std::string m_Tag;

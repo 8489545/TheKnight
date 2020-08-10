@@ -12,6 +12,7 @@ class Monster1 : public Object
 	Sprite* m_RightBox;
 	Sprite* m_LeftBox;
 	Sprite* m_Foot;
+	Sprite* m_AttackBox;
 
 	Sprite* m_Sight;
 
@@ -27,6 +28,7 @@ public:
 	bool m_isRight;
 	bool m_RightCol;
 	bool m_LeftCol;
+	bool m_isAggro;
 
 	float m_Speed;
 

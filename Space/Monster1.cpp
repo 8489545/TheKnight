@@ -36,6 +36,7 @@ Monster1::Monster1(Vec2 Pos)
 	m_RightBox = Sprite::Create(L"Painting/Monster/Monster1/Side.png");
 	m_LeftBox = Sprite::Create(L"Painting/Monster/Monster1/Side.png");
 	m_Foot = Sprite::Create(L"Painting/Monster/Monster1/Foot.png");
+	m_AttackBox = Sprite::Create(L"Painting/Monster/Monster1/AttackBox.png");
 
 	m_Position = Pos;
 
@@ -51,6 +52,7 @@ Monster1::Monster1(Vec2 Pos)
 	vy = 0;
 	m_isGround = false;
 	m_isRight = true;
+	m_isAggro = false;
 
 	m_Speed = 100.f;
 
@@ -83,6 +85,11 @@ void Monster1::Update(float deltaTime, float Time)
 	m_RightBox->SetPosition(m_Position.x + m_ColBox->m_Size.x / 2, m_ColBox->m_Position.y);
 	m_LeftBox->SetPosition(m_Position.x - m_ColBox->m_Size.x / 2, m_ColBox->m_Position.y);
 	m_Foot->SetPosition(m_Position.x, (m_ColBox->m_Position.y + m_ColBox->m_Size.y / 2) - m_Foot->m_Size.y / 2);
+
+	if(m_isRight)
+		m_AttackBox->SetPosition(m_Position.x + 80, (m_Position.y + m_Size.y / 2) - m_ColBox->m_Size.y / 2);
+	else if(!m_isRight)
+		m_AttackBox->SetPosition(m_Position.x - 80, (m_Position.y + m_Size.y / 2) - m_ColBox->m_Size.y / 2);
 	m_Sight->m_Position = m_ColBox->m_Position;
 
 	m_MoveTime += dt;
@@ -94,13 +101,23 @@ void Monster1::Update(float deltaTime, float Time)
 
 	ObjMgr->CollisionCheak(this, "Ground");
 	ObjMgr->CollisionCheak(this, "Wall");
+	ObjMgr->CollisionCheak(m_Sight, "Player");
+
+	if (m_Sight->m_isCollision)
+	{
+		m_isAggro = true;
+	}
+	else
+	{
+		m_isAggro = false;
+	}
 
 	if (m_MoveTime >= 7.f)
 	{
 		m_MoveDist = rand()% 2;
 		m_MoveTime = -7.f;
 	}
-	if (m_MoveTime > 0.f)
+	if (m_MoveTime > 0.f && !m_isAggro)
 	{
 		m_Status = Status::RUN;
 		m_Monster = m_Run;
@@ -143,6 +160,7 @@ void Monster1::Render()
 	m_RightBox->Render();
 	m_LeftBox->Render();
 	m_Foot->Render();
+	m_AttackBox->Render();
 }
 
 void Monster1::OnCollision(Object* other)
