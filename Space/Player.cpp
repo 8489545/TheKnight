@@ -5,29 +5,29 @@ Player::Player()
 {
 	m_Idle = new Animation();
 	m_Idle->SetParent(this);
-	m_Idle->Init(7, true);
+	m_Idle->Init(3, true);
 	m_Idle->AddContinueFrame(L"Painting/Player/Idle/", 1, 11);
 
 	m_Run = new Animation();
 	m_Run->SetParent(this);
-	m_Run->Init(7, true);
+	m_Run->Init(3, true);
 	m_Run->AddContinueFrame(L"Painting/Player/Run/", 1, 8);
 
 	m_Jump = new Animation();
 	m_Jump->SetParent(this);
-	m_Jump->Init(7, true);
+	m_Jump->Init(3, true);
 	m_Jump->AddContinueFrame(L"Painting/Player/Jump/", 1, 4);
 
 	m_AttackLastFrame = 7;
 
 	m_Attack = new Animation();
 	m_Attack->SetParent(this);
-	m_Attack->Init(14, true);
+	m_Attack->Init(7, true);
 	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, m_AttackLastFrame);
 
 	m_Dash = new Animation();
 	m_Dash->SetParent(this);
-	m_Dash->Init(14, true);
+	m_Dash->Init(7, true);
 	m_Dash->AddContinueFrame(L"Painting/Player/Dash/", 1, 4);
 
 	m_Player = m_Idle;
@@ -55,7 +55,7 @@ Player::Player()
 	m_Line->Init(1, true);
 	m_Line->SetColor(D3DXCOLOR(255, 255, 255, 255));
 
-	m_Speed = 500.f;
+	m_Speed = 600.f;
 
 	m_BaseAngle = 0;
 	m_LandAngle = 0 + m_BaseAngle;
@@ -64,6 +64,8 @@ Player::Player()
 	m_JumpPower = 75.f;
 	m_JumpTime = 0;
 	m_JumpAccel = 0.f;
+	m_PrevAccel = 0.f;
+	m_isFall = false;
 
 	m_Hp = 100;
 	m_MaxHp = 100;
@@ -162,9 +164,16 @@ void Player::Jump()
 		static float minus;
 		m_Player = m_Jump;
 
+		m_PrevAccel = m_JumpAccel;
+
 		m_JumpAccel = ((-GR) / 2 * m_JumpTime * m_JumpTime) + (m_JumpPower * m_JumpTime);
 		m_JumpTime += dt * 20.f;
 		m_Position.y = Pos.y - m_JumpAccel;
+
+		if (m_PrevAccel > m_JumpAccel)
+		{
+			m_isFall = true;
+		}
 
 		if (m_JumpAccel < 0.f)
 		{
@@ -185,8 +194,9 @@ void Player::Jump()
 					Translate(-m_Speed * dt, m_Speed * dt);
 			}
 		}
-		if (m_JumpAccel < 0.f)
+		if (m_JumpAccel < 0.f || (m_isFall && m_isGround))
 		{
+			m_PrevAccel = 0.f;
 			m_JumpLate = 0.1f;
 			m_Player = m_Idle;
 			m_PlayerStatus = Status::IDLE;
@@ -384,6 +394,7 @@ void Player::OnCollision(Object* other)
 		if (IntersectRect(&rc, &m_FootCol->m_Collision, &other->m_Collision))
 		{
 			m_isGround = true;
+			m_isFall = false;
 		}
 	}
 	if (other->m_Tag == "Wall")

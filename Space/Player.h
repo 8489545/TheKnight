@@ -53,7 +53,9 @@ public:
 	float m_JumpTime;
 	float m_JumpPower;
 	float m_JumpAccel;
+	float m_PrevAccel;
 	float m_JumpLate;
+	bool m_isFall;
 
 	Vec2 Pos;
 
