@@ -25,6 +25,9 @@
     <Filter Include="Game\Object\Scene">
       <UniqueIdentifier>{6a0b488c-024d-464b-b7e5-e43bc432ea1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Object\Monster">
+      <UniqueIdentifier>{a52a466c-cb9f-4db7-a858-aa88cd5c4f7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -99,6 +102,9 @@
     <ClCompile Include="MapLimit.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Monster1.cpp">
+      <Filter>Game\Object\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -172,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="MapLimit.h">
       <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster1.h">
+      <Filter>Game\Object\Monster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

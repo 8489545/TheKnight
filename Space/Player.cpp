@@ -76,7 +76,7 @@ Player::Player()
 	m_LastDireIsRight = true;
 	m_isGround = false;
 
-	m_Layer = 2;
+	m_Layer = 3;
 
 	m_RightCol = false;
 	m_LeftCol = false;
@@ -351,6 +351,8 @@ void Player::Update(float deltaTime, float Time)
 
 	SetDirection();
 	SetLookingDirection();
+
+	printf("%f %f \n", m_Position.x, m_Position.y);
 
 	if (m_PlayerStatus != Status::DASH)
 	{

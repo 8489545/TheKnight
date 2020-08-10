@@ -29,6 +29,7 @@
     <ClCompile Include="LineMgr.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="MapLimit.cpp" />
+    <ClCompile Include="Monster1.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectMgr.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="LineMgr.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="MapLimit.h" />
+    <ClInclude Include="Monster1.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectMgr.h" />
     <ClInclude Include="Player.h" />
