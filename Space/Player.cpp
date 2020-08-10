@@ -18,11 +18,11 @@ Player::Player()
 	m_Jump->Init(3, true);
 	m_Jump->AddContinueFrame(L"Painting/Player/Jump/", 1, 4);
 
-	m_AttackLastFrame = 7;
+	m_AttackLastFrame = 6;
 
 	m_Attack = new Animation();
 	m_Attack->SetParent(this);
-	m_Attack->Init(7, true);
+	m_Attack->Init(5, true);
 	m_Attack->AddContinueFrame(L"Painting/Player/Attack/", 1, m_AttackLastFrame);
 
 	m_Dash = new Animation();
